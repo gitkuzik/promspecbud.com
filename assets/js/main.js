@@ -3,7 +3,19 @@
  * Без застарілого коду з DLE. Сучасний чистий JavaScript (ES6+).
  */
 
+// ── EmailJS Configuration ──────────────────────────────────────────
+// Зареєструйтесь на https://www.emailjs.com/ та заповніть ці значення:
+const EMAILJS_PUBLIC_KEY = 'IW_0DYdGsjkx6XlSa';       // Dashboard → Account → Public Key
+const EMAILJS_SERVICE_ID = 'service_x0cgzuh';       // Dashboard → Email Services → Service ID
+const EMAILJS_TEMPLATE_ID = 'template_0ou2v68';     // Dashboard → Email Templates → Template ID
+// ────────────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  // 0. EmailJS Initialization
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }
   // 1. Sticky Header Effect
   const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
@@ -178,36 +190,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Interactive Contact / Calculation Form
+  // 6. Interactive Contact / Calculation Form (EmailJS)
+  // ── Helper: send via EmailJS and update UI ──
+  const sendForm = (form, extraParams = {}) => {
+    const name = form.querySelector('input[name="name"]')?.value.trim();
+    const phone = form.querySelector('input[name="phone"]')?.value.trim();
+    const email = form.querySelector('input[name="email"]')?.value.trim() || '—';
+    const service = form.querySelector('select[name="service"]');
+    const serviceText = service ? service.options[service.selectedIndex]?.text : '—';
+    const message = form.querySelector('textarea[name="message"]')?.value.trim() || '—';
+
+    if (!name || !phone) {
+      alert('Будь ласка, вкажіть ваше ім\'я та контактний номер телефону.');
+      return;
+    }
+
+    const btn = form.querySelector('button[type="submit"]');
+    const origText = btn.innerHTML;
+
+    // Disable button while sending
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Надсилаємо…';
+
+    const templateParams = {
+      from_name: name,
+      phone: phone,
+      email: email,
+      service: serviceText,
+      message: message,
+      page: document.title,
+      ...extraParams,
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+      .then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Заявку успішно надіслано!';
+        btn.style.backgroundColor = '#10b981';
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#ffffff';
+
+        setTimeout(() => {
+          alert(`Дякуємо, ${name}! Ваша заявка прийнята. Інженер ТОВ "Промспецбуд" зв\'яжеться з вами протягом найближчого часу за номером ${phone}.`);
+          form.reset();
+          btn.innerHTML = origText;
+          btn.style.backgroundColor = '';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+          btn.disabled = false;
+        }, 600);
+      })
+      .catch((err) => {
+        console.error('EmailJS error:', err);
+        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Помилка надсилання';
+        btn.style.backgroundColor = '#ef4444';
+        btn.style.borderColor = '#ef4444';
+        btn.style.color = '#ffffff';
+
+        setTimeout(() => {
+          alert('На жаль, виникла помилка при відправці. Будь ласка, зателефонуйте нам або надішліть лист на promspecbud@gmail.com.');
+          btn.innerHTML = origText;
+          btn.style.backgroundColor = '';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+          btn.disabled = false;
+        }, 1500);
+      });
+  };
+
+  // Form on the main page (index.html)
   const inquiryForm = document.getElementById('inquiry-form');
-  if (inquiryForm) {
+  if (inquiryForm?.tagName === 'FORM') {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = inquiryForm.querySelector('input[name="name"]')?.value.trim();
-      const phone = inquiryForm.querySelector('input[name="phone"]')?.value.trim();
-      const service = inquiryForm.querySelector('select[name="service"]')?.value;
+      sendForm(inquiryForm);
+    });
+  }
 
-      if (!name || !phone) {
-        alert('Будь ласка, вкажіть ваше ім\'я та контактний номер телефону.');
-        return;
-      }
-
-      // Show friendly confirmation
-      const btn = inquiryForm.querySelector('button[type="submit"]');
-      const origText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> Заявку успішно надіслано!';
-      btn.style.backgroundColor = '#10b981';
-      btn.style.borderColor = '#10b981';
-      btn.style.color = '#ffffff';
-
-      setTimeout(() => {
-        alert(`Дякуємо, ${name}! Ваша заявка прийнята. Інженер ТОВ "Промспецбуд" зв\'яжеться з вами протягом найближчого часу за номером ${phone}.`);
-        inquiryForm.reset();
-        btn.innerHTML = origText;
-        btn.style.backgroundColor = '';
-        btn.style.borderColor = '';
-        btn.style.color = '';
-      }, 500);
+  // Form on the contacts page (kontakty.html)
+  const contactPageForm = document.getElementById('contact-page-form');
+  if (contactPageForm) {
+    contactPageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendForm(contactPageForm);
     });
   }
 
