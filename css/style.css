@@ -1780,11 +1780,9 @@ textarea.form-control {
   }
 
   .about-stat {
-    position: absolute;
-    bottom: -1.5rem;
-    right: -1.5rem;
-    max-width: 300px;
-    margin-top: 0;
+    position: static;
+    max-width: none;
+    margin-top: 1.25rem;
   }
 
   .contact-grid {
@@ -1804,7 +1802,8 @@ textarea.form-control {
 /* ≥1120px — desktop */
 @media (min-width: 1120px) {
   .header-container {
-    padding: 0.85rem 1.5rem;
+    padding: 0.7rem 1.25rem;
+    gap: 0.5rem;
   }
 
   .mobile-toggle {
@@ -1820,9 +1819,11 @@ textarea.form-control {
     opacity: 1;
     visibility: visible;
     flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
     align-items: center;
     padding: 0;
-    gap: 1.5rem;
+    gap: 0.9rem;
     overflow: visible;
     transform: none;
     background: transparent;
@@ -1831,11 +1832,12 @@ textarea.form-control {
   }
 
   .nav-link {
-    font-size: 0.95rem;
+    font-size: 0.87rem;
     padding: 0.5rem 0;
     display: inline-flex;
     justify-content: flex-start;
     border-bottom: none;
+    white-space: nowrap;
   }
 
   .nav-link::after {
@@ -1975,5 +1977,70 @@ textarea.form-control {
 
   .lightbox-next {
     right: 2rem;
+  }
+}
+
+
+/* ==========================================================================
+   LANGUAGE SWITCHER (mobile-first: sits inside the off-canvas menu)
+   ========================================================================== */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 0 0.25rem;
+  margin-top: 0.35rem;
+  border-top: 1px solid var(--border);
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0.55rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-alt);
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.lang-btn:hover {
+  background: var(--accent);
+  color: var(--primary-dark);
+  border-color: var(--accent);
+}
+
+.lang-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* ≥1120px — desktop: compact inline switch inside the nav row */
+@media (min-width: 1120px) {
+  .lang-switch {
+    border-top: none;
+    margin-top: 0;
+    padding: 0;
+    gap: 0.18rem;
+    margin-left: 0.35rem;
+    padding-left: 0.4rem;
+    border-left: 1px solid var(--border);
+  }
+
+  .lang-btn {
+    flex: none;
+    min-width: 30px;
+    padding: 0.28rem 0.38rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
   }
 }

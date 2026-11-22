@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const message = form.querySelector('textarea[name="message"]')?.value.trim() || '—';
 
     if (!name || !phone) {
-      alert('Будь ласка, вкажіть ваше ім\'я та контактний номер телефону.');
+      alert((window.__psbT && window.__psbT('form.required')) || 'Будь ласка, вкажіть ваше ім\'я та контактний номер телефону.');
       return;
     }
 
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Disable button while sending
     btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Надсилаємо…';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + ((window.__psbT && window.__psbT('form.sending')) || 'Надсилаємо…');
 
     const templateParams = {
       from_name: name,
@@ -234,13 +234,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
       .then(() => {
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> Заявку успішно надіслано!';
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> ' + ((window.__psbT && window.__psbT('form.success')) || 'Заявку успішно надіслано!');
         btn.style.backgroundColor = '#10b981';
         btn.style.borderColor = '#10b981';
         btn.style.color = '#ffffff';
 
         setTimeout(() => {
-          alert(`Дякуємо, ${name}! Ваша заявка прийнята. Інженер ТОВ "Промспецбуд" зв\'яжеться з вами протягом найближчого часу за номером ${phone}.`);
+          alert((window.__psbT && window.__psbT('form.successAlert', { name: name, phone: phone })) || `Дякуємо, ${name}! Ваша заявка прийнята. Інженер ТОВ "Промспецбуд" зв\'яжеться з вами протягом найближчого часу за номером ${phone}.`);
           form.reset();
           btn.innerHTML = origText;
           btn.style.backgroundColor = '';
@@ -251,13 +251,13 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((err) => {
         console.error('EmailJS error:', err);
-        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Помилка надсилання';
+        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + ((window.__psbT && window.__psbT('form.error')) || 'Помилка надсилання');
         btn.style.backgroundColor = '#ef4444';
         btn.style.borderColor = '#ef4444';
         btn.style.color = '#ffffff';
 
         setTimeout(() => {
-          alert('На жаль, виникла помилка при відправці. Будь ласка, зателефонуйте нам або надішліть лист на promspecbud5@gmail.com.');
+          alert((window.__psbT && window.__psbT('form.errorAlert')) || 'На жаль, виникла помилка при відправці. Будь ласка, зателефонуйте нам або надішліть лист на promspecbud5@gmail.com.');
           btn.innerHTML = origText;
           btn.style.backgroundColor = '';
           btn.style.borderColor = '';
