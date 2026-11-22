@@ -1987,7 +1987,6 @@ textarea.form-control {
 .lang-switch {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   padding: 0.9rem 0 0.25rem;
   margin-top: 0.35rem;
   border-top: 1px solid var(--border);
@@ -2012,6 +2011,10 @@ textarea.form-control {
   transition: var(--transition);
 }
 
+.lang-btn + .lang-btn {
+  margin-left: 0.5rem;
+}
+
 .lang-btn:hover {
   background: var(--accent);
   color: var(--primary-dark);
@@ -2030,7 +2033,6 @@ textarea.form-control {
     border-top: none;
     margin-top: 0;
     padding: 0;
-    gap: 0.18rem;
     margin-left: 0.35rem;
     padding-left: 0.4rem;
     border-left: 1px solid var(--border);
@@ -2042,5 +2044,9 @@ textarea.form-control {
     padding: 0.28rem 0.38rem;
     font-size: 0.7rem;
     letter-spacing: 0.02em;
+  }
+
+  .lang-btn + .lang-btn {
+    margin-left: 0.4rem;
   }
 }
