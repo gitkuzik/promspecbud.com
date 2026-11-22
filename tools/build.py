@@ -197,6 +197,17 @@ def bake(page, lang):
             if el.has_attr(attr):
                 el[attr] = rewrite_url(el[attr], lang)
 
+    # performance: lazy-load images/iframes so they don't block initial rendering
+    for img in soup.find_all('img'):
+        if img.find_parent('div', class_='hero-card'):
+            img['loading'] = 'eager'
+            img['fetchpriority'] = 'high'
+        else:
+            img['loading'] = 'lazy'
+        img['decoding'] = 'async'
+    for iframe in soup.find_all('iframe'):
+        iframe['loading'] = 'lazy'
+
     # build the cross-language switcher AFTER the URL rewrite, so its links are not re-processed
     rebuild_lang_switch(soup, page, lang)
 
