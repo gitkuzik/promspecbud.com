@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.style.color = '#ffffff';
 
         setTimeout(() => {
-          alert('На жаль, виникла помилка при відправці. Будь ласка, зателефонуйте нам або надішліть лист на promspecbud@gmail.com.');
+          alert('На жаль, виникла помилка при відправці. Будь ласка, зателефонуйте нам або надішліть лист на promspecbud5@gmail.com.');
           btn.innerHTML = origText;
           btn.style.backgroundColor = '';
           btn.style.borderColor = '';
