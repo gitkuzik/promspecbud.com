@@ -293,7 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (animated) return;
     statValues.forEach(stat => {
       const targetText = stat.textContent.trim();
-      const targetNum = parseInt(targetText.replace(/\D/g, ''));
+      // Animate only plain numbers with an optional trailing "+" (e.g. 5000, 500+, 20+).
+      // Skip ranges like "3-4" so they are not mangled into "34".
+      if (!/^\d+\+?$/.test(targetText)) return;
+      const targetNum = parseInt(targetText, 10);
       const suffix = targetText.replace(/[\d\s]/g, '');
       if (isNaN(targetNum)) return;
 
