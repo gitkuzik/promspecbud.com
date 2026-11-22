@@ -26,38 +26,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. Mobile Menu Toggle
+  // 2. Mobile Menu Toggle (right-side drawer, hamburger -> X)
   const mobileToggle = document.querySelector('.mobile-toggle');
   const mainNav = document.querySelector('.main-nav');
+
+  const closeNav = () => {
+    if (!mainNav) return;
+    mainNav.classList.remove('active');
+    mobileToggle?.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
   if (mobileToggle && mainNav) {
     mobileToggle.addEventListener('click', () => {
-      mainNav.classList.toggle('active');
-      const icon = mobileToggle.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-xmark');
+      const isOpen = mainNav.classList.toggle('active');
+      mobileToggle.classList.toggle('active', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close drawer when a real link is tapped (but keep dropdown toggles open)
+    mainNav.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link && !link.closest('.nav-dropdown > .nav-link')) {
+        closeNav();
       }
     });
 
-    // Close menu when clicking outside or on a link
+    // Close when clicking outside
     document.addEventListener('click', (e) => {
       if (!mainNav.contains(e.target) && !mobileToggle.contains(e.target) && mainNav.classList.contains('active')) {
-        mainNav.classList.remove('active');
-        const icon = mobileToggle.querySelector('i');
-        if (icon) {
-          icon.classList.add('fa-bars');
-          icon.classList.remove('fa-xmark');
-        }
+        closeNav();
       }
     });
   }
 
-  // Mobile dropdown toggle
+  // Mobile dropdown toggle (drawer mode: < 1120px)
+  const isMobileNav = () => window.matchMedia('(max-width: 1119px)').matches;
   const dropdowns = document.querySelectorAll('.nav-dropdown');
   dropdowns.forEach(dd => {
     const link = dd.querySelector('.nav-link');
-    if (link && window.innerWidth <= 768) {
+    if (link) {
       link.addEventListener('click', (e) => {
+        if (!isMobileNav()) return;
         e.preventDefault();
         dd.classList.toggle('open');
       });
