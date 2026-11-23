@@ -6,8 +6,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const PAGES = [
   'index.html', 'vidy-robit.html', 'tehnika.html', 'proekty.html',
-  'galereya.html', 'video.html', 'licenzii.html', 'kontakty.html',
-  'golovnyy-bukhhalter.html'
+  'galereya.html', 'video.html', 'licenzii.html', 'kontakty.html'
 ];
 
 // 1. Extract the SHARED object from js/i18n.js (it is a plain JS object literal).

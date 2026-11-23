@@ -27,8 +27,7 @@ BASE = 'https://' + DOMAIN
 
 PAGES = [
     'index.html', 'vidy-robit.html', 'tehnika.html', 'proekty.html',
-    'galereya.html', 'video.html', 'licenzii.html', 'kontakty.html',
-    'golovnyy-bukhhalter.html'
+    'galereya.html', 'video.html', 'licenzii.html', 'kontakty.html'
 ]
 LANGS = ['uk', 'ru', 'en', 'pl']
 LANG_DIR = {'uk': '', 'ru': 'ru', 'en': 'en', 'pl': 'pl'}
